@@ -1,31 +1,51 @@
 import pygame
 import sys
 
-from scripts.utils import load_image
+from scripts.utils import load_image, load_images
 from scripts.entities import PhysicsEntity
+from scripts.tilemap import Tilemap
 FPS = 60
+START_LOCATION = (300, 30)
+TILE_SIZE = 24
 
 class Game:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption('cyber platformer')
         self.screen = pygame.display.set_mode((640, 480))
-        self.display = pygame.Surface((320, 240))
+      #  self.screen = pygame.Surface((640, 480))
         self.clock = pygame.time.Clock()
 
-        #self.img_pos = (self.display.get_width() / 2), (self.display.get_height() / 2)
+        #self.img_pos = (self.screen.get_width() / 2), (self.screen.get_height() / 2)
         self.movement = [False, False]
         
         self.assets = {
-            'player': load_image('entities/player.png')
+            'player': load_image('entities/player.png'),
+            'base': load_images('tiles/base'),
         }
 
-        self.player = PhysicsEntity(self, (0, 0), (17, 46))
+
+        self.tilemap = Tilemap(self, tile_size=TILE_SIZE)
+        self.tilemap.load('map.json')
+        self.player = PhysicsEntity(self,  START_LOCATION, (17, 46))
+
+        self.scroll = [0, 0]
+
     def run(self):
         while True:
-            self.display.fill((255, 255, 255))
-            self.player.update((self.movement[1] - self.movement[0], 0))
-            self.player.render(self.display)
+            self.screen.fill((255, 255, 255))
+
+            # This is the formula that locks the camera to the character
+            self.scroll[0] += (self.player.rect().centerx - self.screen.get_width() / 2 - self.scroll[0]) /30
+            self.scroll[1] += (self.player.rect().centery - self.screen.get_height() / 2 - self.scroll[1]) /30
+            render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
+            print(f'self.scroll: {self.scroll}')
+            print(f'render_scroll: {render_scroll}')
+
+            self.tilemap.render(self.screen, offset=render_scroll)
+
+            self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0))
+            self.player.render(self.screen)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -37,6 +57,11 @@ class Game:
                         self.movement[0] = True
                     if event.key == pygame.K_d:
                         self.movement[1] = True
+                    if event.key == pygame.K_w:
+                        self.player.velocity[1] = -3
+                    if event.key == pygame.K_F12: # Resets character back to 0,0
+                        self.player.pos[0] = START_LOCATION[0]
+                        self.player.pos[1] = START_LOCATION[1]
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
@@ -49,7 +74,7 @@ class Game:
                     
 
 
-            self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
+            #self.screen.blit(self.screen, (0, 0))
             pygame.display.update()
             self.clock.tick(FPS)
 game = Game()
