@@ -1,3 +1,2 @@
 
-        pygame.display.set_caption('cyber platformer')
-        self.screen = pygame.display.set_mode((640, 480))
+        #self.img_pos = (self.screen.get_width() / 2), (self.screen.get_height() / 2)

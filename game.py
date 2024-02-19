@@ -5,7 +5,7 @@ from scripts.utils import load_image, load_images
 from scripts.entities import PhysicsEntity
 from scripts.tilemap import Tilemap
 FPS = 60
-START_LOCATION = (300, 30)
+START_LOCATION = [300, 30]
 TILE_SIZE = 24
 
 class Game:
@@ -16,7 +16,7 @@ class Game:
       #  self.screen = pygame.Surface((640, 480))
         self.clock = pygame.time.Clock()
 
-        #self.img_pos = (self.screen.get_width() / 2), (self.screen.get_height() / 2)
+        self.img_pos = (self.screen.get_width() / 2), (self.screen.get_height() / 2)
         self.movement = [False, False]
         
         self.assets = {
@@ -36,11 +36,10 @@ class Game:
             self.screen.fill((255, 255, 255))
 
             # This is the formula that locks the camera to the character
-            self.scroll[0] += (self.player.rect().centerx - self.screen.get_width() / 2 - self.scroll[0]) /30
-            self.scroll[1] += (self.player.rect().centery - self.screen.get_height() / 2 - self.scroll[1]) /30
+            self.scroll[0] += (self.player.rect().centerx - self.screen.get_width() / 2 - self.scroll[0]) / 30
+            self.scroll[1] += (self.player.rect().centery - self.screen.get_height() / 2 - self.scroll[1]) / 30
             render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
-            print(f'self.scroll: {self.scroll}')
-            print(f'render_scroll: {render_scroll}')
+
 
             self.tilemap.render(self.screen, offset=render_scroll)
 
