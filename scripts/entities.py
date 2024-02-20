@@ -18,7 +18,7 @@ class PhysicsEntity:
 
 
     def update(self, tilemap, movement=(0, 0)):
-        #self.collisions = {'up': False, 'down': False, 'left': False, 'right': False}
+        self.collisions = {'up': False, 'down': False, 'left': False, 'right': False}
         frame_movement = (movement[0] + self.velocity[0], movement[1] + self.velocity[1])
         print(self.pos)
 
@@ -43,14 +43,11 @@ class PhysicsEntity:
             if entity_rect.colliderect(rect):
 
 
-                if frame_movement[1] > 0:
+                if frame_movement[1] >= 0:
                     entity_rect.bottom = rect.top
                     self.collisions['down'] = True
-                    print(f'collisions: {self.collisions}')
-                    print(f'Rect:{rect}')
-                    print(f'player pos{entity_rect}')
-                    print(f'velocity: {self.velocity}')
-                    print(frame_movement)
+                    frame_movement = frame_movement[0], 0
+                    self.velocity[1] = 0
 
 
                 if frame_movement[1] < 0:
@@ -59,7 +56,6 @@ class PhysicsEntity:
 
                 self.pos[1] = entity_rect.y
 
-                print(frame_movement)
 
 
         # Gravity babyyyyyy
@@ -70,8 +66,11 @@ class PhysicsEntity:
                     print('stopped')
                 if self.collisions['left'] or ['right'] == True:
                     self.velocity[0] = 0
-    
-        self.velocity[1] = min(5, self.velocity[1] + GRAVITY)
+
+        if self.collisions['down'] or self.collisions['up'] == True:
+            pass
+        else:
+            self.velocity[1] = min(5, self.velocity[1] + GRAVITY)
 
 
 

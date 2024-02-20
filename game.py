@@ -41,7 +41,7 @@ class Game:
             render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
 
 
-            self.tilemap.render(self.screen, offset=render_scroll)
+            self.tilemap.render(self.screen, offset=(0, 0))
 
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0))
             self.player.render(self.screen)
