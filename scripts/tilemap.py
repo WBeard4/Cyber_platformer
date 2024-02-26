@@ -16,7 +16,7 @@ AUTOTILE_MAP = {
 }
 
 # Setting each tile around and including player, so we can check if there is a tile there
-NEIGHBOUR_OFFSETS = [(-1, -1) , (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (1, -1), (1, 0), (1, 1), (0, 2)]
+NEIGHBOUR_OFFSETS = [(-1, -1) , (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
 
 # Choosing which type of tiles we want to have physics, so the character can collide with them
 PHYSICS_TILES = {'base'}
